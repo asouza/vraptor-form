@@ -19,12 +19,13 @@ public class Form<T> {
 	private MessageInterpolator interpolator;
 	private Locale locale;
 	private ValidationErrors errors = new ValidationErrors();
+	private boolean validated;
 
-	public Form(Validator validator, MessageInterpolator interpolator,Locale locale) {
+	public Form(Validator validator, MessageInterpolator interpolator, Locale locale) {
 		this.validator = validator;
 		this.interpolator = interpolator;
 		this.locale = locale;
-		
+
 	}
 
 	public Form<T> bind(T object) {
@@ -39,12 +40,15 @@ public class Form<T> {
 
 	@SuppressWarnings("rawtypes")
 	private void validate() {
-		Set<ConstraintViolation<T>> violations = validator.validate(this.object);
-		for (ConstraintViolation constraintViolation : violations) {
-			BeanValidatorContext ctx = new BeanValidatorContext(constraintViolation);
-			String msg = interpolator.interpolate(constraintViolation.getMessageTemplate(), ctx, locale);
-			errors.add(new SimpleMessage(constraintViolation.getPropertyPath().toString(),msg));
+		if (!validated) {
+			Set<ConstraintViolation<T>> violations = validator.validate(this.object);
+			for (ConstraintViolation constraintViolation : violations) {
+				BeanValidatorContext ctx = new BeanValidatorContext(constraintViolation);
+				String msg = interpolator.interpolate(constraintViolation.getMessageTemplate(), ctx, locale);
+				errors.add(new SimpleMessage(constraintViolation.getPropertyPath().toString(), msg));
+			}
 		}
+		validated = true;
 	}
 
 }

@@ -8,17 +8,15 @@ import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 public class FormTest {
 	
@@ -44,26 +42,38 @@ public class FormTest {
 	}
 	
 	@Test
-	public void shouldFailValidateBased() {
+	public void shouldHasErrorsWhenValidationFail() {
 		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
 		
 		Usuario usuario = new Usuario(null,null);
 		form.bind(usuario);
-		assertTrue(form.hasErrors());
+		assertTrue(form.hasErrors());	
 	}
 	
 	@Test
-	public void shouldNotValidateTwice() {
+	public void shouldCountErrorsWhenValidationFail() {
 		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
 		
 		Usuario usuario = new Usuario(null,null);
 		form.bind(usuario);
-		form.hasErrors();
-		form.hasErrors();
 		
-		//find why this verification is not being executed.
-		verify(validator,times(1)).validate(Mockito.same(usuario));
+		assertEquals(2,form.getErrors().count());	
 	}
+	
+	@Test
+	public void shouldAccessFailedProperty(){
+		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
+		
+		Usuario usuario = new Usuario(null,null);
+		form.bind(usuario);
+		
+		FormField field = form.getErrors().get("email");
+		
+		assertEquals(1,field.getMessages().size());
+		assertEquals("may not be null",field.getMessages().get(0).getMessage());
+	}
+	
+	
 	
 	
 	

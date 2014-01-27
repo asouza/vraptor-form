@@ -1,5 +1,7 @@
 package br.com.vraptorstack.form;
 
+import java.util.ArrayList;
+
 import br.com.caelum.vraptor.validator.Message;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -15,6 +17,14 @@ public class ValidationErrors {
 
 	public boolean isEmpty() {
 		return errors.isEmpty();
+	}
+
+	public int count() {
+		return errors.size();
+	}
+
+	public FormField get(String property) {
+		return new FormField(new ArrayList<Message>(errors.get(property)));
 	}
 	
 	

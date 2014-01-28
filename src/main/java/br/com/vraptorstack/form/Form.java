@@ -28,7 +28,7 @@ public class Form<T> {
 		this.validator = validator;
 		this.interpolator = interpolator;
 		this.locale = locale;
-		this.object = (T) new Mirror().on(clazz).invoke().constructor();
+		this.object = (T) new Mirror().on(clazz).invoke().constructor().withoutArgs();
 	}
 
 	public Form<T> bind(T object) {

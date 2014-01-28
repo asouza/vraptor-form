@@ -9,26 +9,39 @@ public class User {
 
 	@NotNull
 	@DefaultValue(NAME_DEFAULT_TEXT)
-	private String nome;
+	private String name;
 
 	@NotNull
 	private String email;
 
+	private Task task;
+
 	public User() {
 	}
-	
+
 	public User(String email, String nome) {
 		super();
 		this.email = email;
-		this.nome = nome;
+		this.name = nome;
 	}
-	
-	public String getNome() {
-		return nome;
+
+	public User(String nome, String email, Task task) {
+		super();
+		this.name = nome;
+		this.email = email;
+		this.task = task;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
 	public String getEmail() {
 		return email;
+	}
+	
+	public Task getTask() {
+		return task;
 	}
 
 }

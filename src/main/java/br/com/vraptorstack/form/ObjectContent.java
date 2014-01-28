@@ -1,5 +1,7 @@
 package br.com.vraptorstack.form;
 
+import ognl.Ognl;
+import ognl.OgnlException;
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.vraptorstack.form.annotation.DefaultValue;
 
@@ -9,10 +11,14 @@ public class ObjectContent {
 	private Object object;
 	private Object content;
 
-	public ObjectContent(Object object, String field) {
+	public ObjectContent(Object object, String propertyPath) {
 		this.object = object;
-		this.field = field;
-		this.content = new Mirror().on(object).invoke().getterFor(field);
+		this.field = propertyPath;
+		try {
+			this.content = Ognl.getValue(propertyPath,object);
+		} catch (OgnlException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public ObjectContent orDefault() {

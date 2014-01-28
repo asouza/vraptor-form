@@ -1,8 +1,10 @@
 package br.com.vraptorstack.form;
 
-import static org.junit.Assert.*;
+import ognl.OgnlException;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ObjectContentTest {
 
@@ -15,6 +17,16 @@ public class ObjectContentTest {
 		
 		assertEquals(name, objectContent.toString());
 	}
+	
+	@Test
+	public void shouldUseContentNavigatingIfItsNotNull() throws OgnlException {
+		String projectName = "project";
+		User user = new User("leo@leo.com", projectName, new Task("task",new Project(projectName)));
+		
+		ObjectContent objectContent = objectContent(user,"task.project.name");
+		
+		assertEquals(projectName, objectContent.toString());
+	}
 
 	@Test
 	public void shouldDefaultValueIfContentIsNull() {
@@ -26,7 +38,11 @@ public class ObjectContentTest {
 	}
 
 	private ObjectContent objectContent(User user) {
-		return  new ObjectContent(user, "nome").orDefault();
+		return  new ObjectContent(user, "name").orDefault();
+	}
+	
+	private ObjectContent objectContent(User user,String propertyPath) {		
+		return  new ObjectContent(user, propertyPath).orDefault();
 	}
 
 }

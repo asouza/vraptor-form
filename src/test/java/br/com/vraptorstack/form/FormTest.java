@@ -1,5 +1,10 @@
 package br.com.vraptorstack.form;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.spy;
+
 import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
@@ -11,12 +16,6 @@ import org.junit.Test;
 
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.spy;
 
 public class FormTest {
 	
@@ -34,27 +33,27 @@ public class FormTest {
 
 	@Test
 	public void shouldValidateBased() {
-		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
+		Form<User> form = newForm();
 
-		Usuario usuario = new Usuario("email@gmail.com", "Jonny");
+		User usuario = new User("email@gmail.com", "Jonny");
 		form.bind(usuario);
 		assertFalse(form.hasErrors());
 	}
-	
+
 	@Test
 	public void shouldHasErrorsWhenValidationFail() {
-		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
+		Form<User> form = newForm();
 		
-		Usuario usuario = new Usuario(null,null);
+		User usuario = new User(null,null);
 		form.bind(usuario);
 		assertTrue(form.hasErrors());	
 	}
 	
 	@Test
 	public void shouldCountErrorsWhenValidationFail() {
-		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
+		Form<User> form = newForm();
 		
-		Usuario usuario = new Usuario(null,null);
+		User usuario = new User(null,null);
 		form.bind(usuario);
 		
 		assertEquals(2,form.getErrors().count());	
@@ -62,9 +61,9 @@ public class FormTest {
 	
 	@Test
 	public void shouldAccessFailedProperty(){
-		Form<Usuario> form = new Form<Usuario>(validator, interpolator,locale);
+		Form<User> form = newForm();
 		
-		Usuario usuario = new Usuario(null,null);
+		User usuario = new User(null,null);
 		form.bind(usuario);
 		
 		FormField field = form.getErrors().get("email");
@@ -72,10 +71,9 @@ public class FormTest {
 		assertEquals(1,field.getErrors().size());
 		assertEquals("may not be null",field.getMessage(0));
 	}
-	
-	
-	
-	
-	
-	
+
+	private Form<User> newForm() {
+		return new Form<User>(validator, interpolator,locale, User.class);
+	}
+
 }

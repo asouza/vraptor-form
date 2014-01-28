@@ -69,8 +69,8 @@ public class FormTest {
 		
 		FormField field = form.getErrors().get("email");
 		
-		assertEquals(1,field.getMessages().size());
-		assertEquals("may not be null",field.getMessages().get(0).getMessage());
+		assertEquals(1,field.getErrors().size());
+		assertEquals("may not be null",field.getMessage(0));
 	}
 	
 	

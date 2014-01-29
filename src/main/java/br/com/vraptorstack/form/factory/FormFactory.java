@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
 
+import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.vraptorstack.form.Form;
 
 @RequestScoped
@@ -18,6 +19,7 @@ public class FormFactory {
 	@Inject private Validator validator;
 	@Inject private MessageInterpolator interpolator;
 	@Inject private Locale locale;
+	@Inject private MethodExecutor methodExecutor;
 
 	
 	@Produces
@@ -27,7 +29,7 @@ public class FormFactory {
 	    ParameterizedType type = (ParameterizedType) injectionPoint.getType();
 	    Class clazz = (Class) type.getActualTypeArguments()[0];
 	    
-		return new Form(validator, interpolator, locale, clazz);
+		return new Form(validator, interpolator, locale, methodExecutor,clazz);
 		
 	}
 }

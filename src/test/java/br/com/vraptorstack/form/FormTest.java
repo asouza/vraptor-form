@@ -99,9 +99,21 @@ public class FormTest {
 		assertEquals(1,form.getGlobalErrors().size());
 		assertEquals("email taken",form.getGlobalErrors().get(0).getMessage());
 	}
+	
+	@Test
+	public void shouldSupportCustomValidateMethod(){
+		Project project = new Project("project name");
+		Form<Project> form = newForm(Project.class).bind(project);
+		form.bind(project);
+		assertTrue(form.hasErrors());
+	}
 
 	private Form<User> newForm() {
-		return new Form<User>(validator, interpolator,locale, User.class);
+		return newForm(User.class);
+	}
+	
+	private <T> Form<T> newForm(Class<T> klass) {
+		return new Form<T>(validator, interpolator,locale,new MirrorMethodExecutor(), klass);
 	}
 
 }

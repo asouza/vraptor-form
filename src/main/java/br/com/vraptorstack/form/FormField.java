@@ -21,4 +21,8 @@ public class FormField {
 	public String getError(int i) {
 		return errors.get(i).getMessage();
 	}
+	
+	public Object getValue(){
+		return objectContent.getContent();
+	}
 }

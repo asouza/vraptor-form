@@ -33,5 +33,9 @@ public class ObjectContent {
 	public String toString() {
 		return content.toString();
 	}
+	
+	public Object getContent() {
+		return content;
+	}
 
 }

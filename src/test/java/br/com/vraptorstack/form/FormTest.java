@@ -96,8 +96,8 @@ public class FormTest {
 		
 		FormField field = form.get("email");
 		assertEquals(1, field.getErrors().size());
-		assertEquals(1,form.getGlobalErrors().count());
-		assertEquals("email taken",form.getGlobalErrors().get().getError(0));
+		assertEquals(1,form.getGlobalErrors().size());
+		assertEquals("email taken",form.getGlobalErrors().get(0).getMessage());
 	}
 
 	private Form<User> newForm() {

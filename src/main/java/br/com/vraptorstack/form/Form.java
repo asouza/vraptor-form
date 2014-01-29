@@ -1,5 +1,7 @@
 package br.com.vraptorstack.form;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
 
 import net.vidageek.mirror.dsl.Mirror;
+import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.beanvalidation.BeanValidatorContext;
 
@@ -20,7 +23,7 @@ public class Form<T> {
 	private MessageInterpolator interpolator;
 	private Locale locale;
 	private ValidationErrors fieldErrors = new ValidationErrors();
-	private ValidationErrors globalErrors = new ValidationErrors();
+	private List<Message> globalErrors = new ArrayList<>();
 
 
 	@SuppressWarnings("unchecked")
@@ -45,6 +48,10 @@ public class Form<T> {
 	public FormField get(String field) {
 		return new FormField(fieldErrors.get(field),new ObjectContent(object, field));
 		
+	}
+	
+	public List<Message> getGlobalErrors() {
+		return globalErrors;
 	}
 
 	@SuppressWarnings("rawtypes")

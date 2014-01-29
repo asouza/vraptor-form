@@ -11,11 +11,11 @@ import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
 
+import org.mockito.cglib.transform.impl.AddStaticInitTransformer;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.objenesis.instantiator.ObjectInstantiator;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
@@ -30,6 +30,7 @@ public class Form<T> {
 	private Locale locale;
 	private ValidationErrors fieldErrors = new ValidationErrors();
 	private List<Message> globalErrors = new ArrayList<>();
+	private List<Message> allErrors = new ArrayList<>();
 	private MethodExecutor methodExecutor;
 	private Method customValidatorMethod;
 	private static Objenesis objenesis = new ObjenesisStd();
@@ -41,7 +42,7 @@ public class Form<T> {
 		this.interpolator = interpolator;
 		this.locale = locale;
 		this.methodExecutor = methodExecutor;
-		
+
 		ObjectInstantiator<?> instantiator = Form.objenesis.getInstantiatorOf(clazz);
 		this.object = (T) instantiator.newInstance();
 		try {
@@ -76,27 +77,41 @@ public class Form<T> {
 		for (ConstraintViolation constraintViolation : violations) {
 			BeanValidatorContext ctx = new BeanValidatorContext(constraintViolation);
 			String msg = interpolator.interpolate(constraintViolation.getMessageTemplate(), ctx, locale);
-			fieldErrors.add(new SimpleMessage(constraintViolation.getPropertyPath().toString(), msg));
+			reject(constraintViolation.getPropertyPath().toString(), msg);
 		}
 
 		if (customValidatorMethod != null) {
 			List<Message> errors = methodExecutor.invoke(customValidatorMethod, object);
 			for (Message message : errors) {
 				if (message.getCategory() == null || message.getCategory().trim().equals("")) {
-					globalErrors.add(message);
+					addGlobaldError(message);
 				} else {
-					fieldErrors.add(message);
+					addFieldError(message);
 				}
 			}
 		}
 	}
 
 	public void reject(String field, String message) {
-		fieldErrors.add(new SimpleMessage(field, message));
+		addFieldError(new SimpleMessage(field, message));
 	}
 
 	public void reject(String message) {
-		globalErrors.add(new SimpleMessage("", message));
+		addGlobaldError(new SimpleMessage("", message));
+	}
+
+	private void addFieldError(Message message) {
+		allErrors.add(message);
+		fieldErrors.add(message);
+	}
+	
+	private void addGlobaldError(Message message) {
+		allErrors.add(message);
+		globalErrors.add(message);
+	}
+
+	public List<Message> getAllErrors() {
+		return allErrors;
 	}
 
 }

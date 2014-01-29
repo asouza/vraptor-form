@@ -101,6 +101,15 @@ public class FormTest {
 	}
 	
 	@Test
+	public void shouldGetAllErrors(){
+		Form<User> form = newForm();
+		User user = new User(null, "jonny");
+		form.bind(user);
+		form.reject("email taken");
+		assertEquals(2,form.getAllErrors().size());
+	}
+	
+	@Test
 	public void shouldSupportCustomValidateMethod(){
 		Project project = new Project("project name");
 		Form<Project> form = newForm(Project.class).bind(project);

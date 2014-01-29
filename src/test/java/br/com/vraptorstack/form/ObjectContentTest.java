@@ -41,7 +41,7 @@ public class ObjectContentTest {
 		return  new ObjectContent(user, "name").orDefault();
 	}
 	
-	private ObjectContent objectContent(User user,String propertyPath) {		
+	private ObjectContent objectContent(User user,String propertyPath) {
 		return  new ObjectContent(user, propertyPath).orDefault();
 	}
 

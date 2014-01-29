@@ -56,7 +56,9 @@ public class FormTest {
 		User usuario = new User(null,null);
 		form.bind(usuario);
 		
-		assertEquals(2,form.getErrors().count());	
+		FormField field = form.get("email");
+		
+		assertEquals(1,field.getErrors().size());	
 	}
 	
 	@Test
@@ -66,10 +68,36 @@ public class FormTest {
 		User usuario = new User(null,null);
 		form.bind(usuario);
 		
-		FormField field = form.getErrors().get("email");
+		FormField field = form.get("email");
 		
 		assertEquals(1,field.getErrors().size());
-		assertEquals("may not be null",field.getMessage(0));
+		assertEquals("may not be null",field.getError(0));
+	}
+	
+	public void shouldAddErrorToEspecificField(){
+		Form<User> form = newForm();
+		
+		User user = new User(null, "jonny");
+		form.bind(user);
+		form.reject("email","invalid");
+		
+		FormField field = form.get("email");
+		assertEquals(2,field.getErrors().size());
+		assertEquals("invalid",field.getError(1));
+	}
+	
+	@Test
+	public void shouldAddGlobalError(){
+		Form<User> form = newForm();
+		
+		User user = new User(null, "jonny");
+		form.bind(user);
+		form.reject("email taken");
+		
+		FormField field = form.get("email");
+		assertEquals(1, field.getErrors().size());
+		assertEquals(1,form.getGlobalErrors().count());
+		assertEquals("email taken",form.getGlobalErrors().get().getError(0));
 	}
 
 	private Form<User> newForm() {

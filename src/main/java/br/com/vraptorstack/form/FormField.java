@@ -7,16 +7,18 @@ import br.com.caelum.vraptor.validator.Message;
 public class FormField {
 
 	private List<Message> errors;
+	private ObjectContent objectContent;
 
-	public FormField(List<Message> errors) {
+	public FormField(List<Message> errors, ObjectContent objectContent) {
 		this.errors = errors;
+		this.objectContent = objectContent;
 	}
 	
 	public List<Message> getErrors() {
 		return errors;
 	}
 
-	public String getMessage(int i) {
+	public String getError(int i) {
 		return errors.get(i).getMessage();
 	}
 }

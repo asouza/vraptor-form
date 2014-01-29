@@ -19,19 +19,19 @@ public class User {
 	public User() {
 	}
 
-	public User(String email, String nome) {
+	public User(String email, String name) {
 		super();
 		this.email = email;
-		this.name = nome;
+		this.name = name;
 	}
 
-	public User(String nome, String email, Task task) {
+	public User(String name, String email, Task task) {
 		super();
-		this.name = nome;
+		this.name = name;
 		this.email = email;
 		this.task = task;
 	}
-
+	
 	public String getName() {
 		return name;
 	}

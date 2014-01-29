@@ -1,6 +1,7 @@
 package br.com.vraptorstack.form;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.caelum.vraptor.validator.Message;
 
@@ -23,8 +24,9 @@ public class ValidationErrors {
 		return errors.size();
 	}
 
-	public FormField get(String property) {
-		return new FormField(new ArrayList<Message>(errors.get(property)));
+	@SuppressWarnings("unchecked")
+	public List<Message> get(String property) {
+		return new ArrayList(errors.get(property));
 	}
 	
 	

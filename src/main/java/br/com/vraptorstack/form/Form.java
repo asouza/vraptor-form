@@ -4,7 +4,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
@@ -20,9 +19,11 @@ public class Form<T> {
 	private Validator validator;
 	private MessageInterpolator interpolator;
 	private Locale locale;
-	private ValidationErrors errors = new ValidationErrors();
+	private ValidationErrors fieldErrors = new ValidationErrors();
+	private ValidationErrors globalErrors = new ValidationErrors();
 
 
+	@SuppressWarnings("unchecked")
 	public Form(Validator validator, MessageInterpolator interpolator,
 			Locale locale, Class<?> clazz) {
 		this.validator = validator;
@@ -38,11 +39,12 @@ public class Form<T> {
 	}
 
 	public boolean hasErrors() {
-		return !errors.isEmpty();
+		return !fieldErrors.isEmpty();
 	}
 
-	public ObjectContent get(String field) {
-		return new ObjectContent(object, field);
+	public FormField get(String field) {
+		return new FormField(fieldErrors.get(field),new ObjectContent(object, field));
+		
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -51,12 +53,17 @@ public class Form<T> {
 			for (ConstraintViolation constraintViolation : violations) {
 				BeanValidatorContext ctx = new BeanValidatorContext(constraintViolation);
 				String msg = interpolator.interpolate(constraintViolation.getMessageTemplate(), ctx, locale);
-				errors.add(new SimpleMessage(constraintViolation.getPropertyPath().toString(), msg));
+				fieldErrors.add(new SimpleMessage(constraintViolation.getPropertyPath().toString(), msg));
 			}
 	}
 	
-	public ValidationErrors getErrors() {
-		return errors;
+	public void reject(String field, String message) {
+		fieldErrors.add(new SimpleMessage(field,message));
 	}
+
+	public void reject(String message) {
+		globalErrors.add(new SimpleMessage("",message));
+	}
+		
 
 }

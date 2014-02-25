@@ -21,6 +21,9 @@ public class Project {
 	}
 	
 	public List<Message> validate(){
-		return Lists.<Message>newArrayList(new SimpleMessage("","project creation has a problem"));				
+		if(this.name==null){
+			return Lists.<Message>newArrayList(new SimpleMessage("","project creation has a problem"));
+		}
+		return null;
 	}
 }

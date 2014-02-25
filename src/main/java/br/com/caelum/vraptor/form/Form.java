@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.form;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -11,7 +12,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
 
-import org.mockito.cglib.transform.impl.AddStaticInitTransformer;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.objenesis.instantiator.ObjectInstantiator;
@@ -82,6 +82,7 @@ public class Form<T> {
 
 		if (customValidatorMethod != null) {
 			List<Message> errors = methodExecutor.invoke(customValidatorMethod, object);
+			errors = errors == null ? errors = Collections.<Message>emptyList() : errors;
 			for (Message message : errors) {
 				if (message.getCategory() == null || message.getCategory().trim().equals("")) {
 					addGlobaldError(message);

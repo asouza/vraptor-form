@@ -113,12 +113,20 @@ public class FormTest {
 	}
 	
 	@Test
-	public void shouldSupportCustomValidateMethod(){
-		Project project = new Project("project name");
+	public void shouldConsiderCustomValidationFailedForNonEmptyList(){
+		Project project = new Project(null);
 		Form<Project> form = newForm(Project.class).bind(project);
 		form.bind(project);
 		assertTrue(form.hasErrors());
 	}
+	
+	@Test
+	public void shouldConsiderCustomValidationOkForNull(){
+		Project project = new Project("project name");
+		Form<Project> form = newForm(Project.class).bind(project);
+		form.bind(project);
+		assertFalse(form.hasErrors());
+	}	
 
 	private Form<User> newForm() {
 		return newForm(User.class);

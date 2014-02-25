@@ -1,9 +1,9 @@
-package br.com.vraptorstack.form;
+package br.com.caelum.vraptor.form;
 
 import ognl.Ognl;
 import ognl.OgnlException;
 import net.vidageek.mirror.dsl.Mirror;
-import br.com.vraptorstack.form.annotation.DefaultValue;
+import br.com.caelum.vraptor.form.annotation.DefaultValue;
 
 public class ObjectContent {
 

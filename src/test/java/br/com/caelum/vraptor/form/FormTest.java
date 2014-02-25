@@ -1,8 +1,9 @@
-package br.com.vraptorstack.form;
+package br.com.caelum.vraptor.form;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.spy;
 
 import java.util.Locale;
@@ -14,6 +15,8 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.vraptor.form.Form;
+import br.com.caelum.vraptor.form.FormField;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
 import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 

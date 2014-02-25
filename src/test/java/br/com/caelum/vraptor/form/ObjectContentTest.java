@@ -1,8 +1,10 @@
-package br.com.vraptorstack.form;
+package br.com.caelum.vraptor.form;
 
 import ognl.OgnlException;
 
 import org.junit.Test;
+
+import br.com.caelum.vraptor.form.ObjectContent;
 
 import static org.junit.Assert.assertEquals;
 

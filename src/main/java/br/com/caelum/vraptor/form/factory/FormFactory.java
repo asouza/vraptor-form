@@ -1,4 +1,4 @@
-package br.com.vraptorstack.form.factory;
+package br.com.caelum.vraptor.form.factory;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Locale;
@@ -11,8 +11,8 @@ import javax.inject.Inject;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
 
+import br.com.caelum.vraptor.form.Form;
 import br.com.caelum.vraptor.reflection.MethodExecutor;
-import br.com.vraptorstack.form.Form;
 
 @RequestScoped
 public class FormFactory {

@@ -1,4 +1,4 @@
-package br.com.vraptorstack.form;
+package br.com.caelum.vraptor.form;
 
 import java.util.List;
 

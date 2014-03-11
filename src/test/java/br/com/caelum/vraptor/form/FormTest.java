@@ -9,9 +9,11 @@ import static org.mockito.Mockito.spy;
 import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
+import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
 import br.com.caelum.vraptor.form.Form;
 import br.com.caelum.vraptor.form.FormField;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
-import br.com.caelum.vraptor.validator.beanvalidation.ValidatorFactoryCreator;
 
 public class FormTest {
 	
@@ -30,7 +31,7 @@ public class FormTest {
 
 	@Before
 	public void setup(){
-		ValidatorFactory factory = new ValidatorFactoryCreator().getInstance();
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		validator = spy(factory.getValidator());
 		interpolator = new MessageInterpolatorFactory(factory).getInstance();
 		locale = Locale.US;

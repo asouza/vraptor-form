@@ -34,10 +34,12 @@ public class Form<T> {
 	private MethodExecutor methodExecutor;
 	private Method customValidatorMethod;
 	private static Objenesis objenesis = new ObjenesisStd();
+	private MassAssignmentValidatorConfig massAssignmentValidatorConfig;
 
 	@SuppressWarnings("unchecked")
 	public Form(Validator validator, MessageInterpolator interpolator, Locale locale, MethodExecutor methodExecutor,
 			Class<?> clazz) {
+		
 		this.validator = validator;
 		this.interpolator = interpolator;
 		this.locale = locale;
@@ -56,6 +58,10 @@ public class Form<T> {
 		this.object = object;
 		validate();
 		return this;
+	}
+	
+	public void setMassAssignmentValidatorConfig(MassAssignmentValidatorConfig massAssignmentValidatorConfig) {
+		this.massAssignmentValidatorConfig = massAssignmentValidatorConfig;
 	}
 
 	public boolean hasErrors() {
@@ -114,5 +120,23 @@ public class Form<T> {
 	public List<Message> getAllErrors() {
 		return allErrors;
 	}
+
+	public boolean checkBlackList(String... notAllowedParams) {
+		checkNonNull(massAssignmentValidatorConfig,MassAssignmentValidatorConfig.class.getSimpleName()+" should be set to use checkBlackList");
+		return massAssignmentValidatorConfig.blackList(notAllowedParams);
+	}
+
+	private void checkNonNull(Object object,String message) {
+		if(object==null){
+			throw new IllegalStateException(message);
+		}
+	}
+
+	public boolean checkWhiteList(String... allowedParams) {
+		checkNonNull(massAssignmentValidatorConfig,MassAssignmentValidatorConfig.class.getSimpleName()+" should be set to use checkWhiteList");
+		return massAssignmentValidatorConfig.whiteList(allowedParams);
+	}
+	
+	
 
 }

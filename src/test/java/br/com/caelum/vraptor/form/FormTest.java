@@ -15,6 +15,8 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableMap;
+
 import br.com.caelum.vraptor.form.Form;
 import br.com.caelum.vraptor.form.FormField;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;

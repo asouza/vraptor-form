@@ -2,15 +2,14 @@ package br.com.caelum.vraptor.form;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.common.collect.Sets;
 
 public class MassAssignmentValidatorConfig {
 
-	private Map<String, String> params;
+	private Map<String, ?> params;
 
-	public MassAssignmentValidatorConfig(Map<String, String> params) {
+	public MassAssignmentValidatorConfig(Map<String, ?> params) {
 		this.params = params;
 	}
 

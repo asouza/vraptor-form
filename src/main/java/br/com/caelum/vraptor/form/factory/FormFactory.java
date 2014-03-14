@@ -40,6 +40,8 @@ public class FormFactory {
 	private MethodExecutor methodExecutor;
 	@Inject
 	private MutableRequest mutableRequest;
+	@Inject
+	private br.com.caelum.vraptor.validator.Validator vraptorValidator; 
 	
 	private Object needsFormParameter;
 	private static final Logger logger = LoggerFactory.getLogger(FormFactory.class);
@@ -50,7 +52,7 @@ public class FormFactory {
 
 		ParameterizedType type = (ParameterizedType) injectionPoint.getType();
 		Class<T> clazz = (Class<T>) type.getActualTypeArguments()[0];
-		Form<T> form = new Form<T>(validator, interpolator, locale, methodExecutor, clazz);
+		Form<T> form = new Form<T>(validator, interpolator, locale, methodExecutor,vraptorValidator,clazz);
 
 		Annotated field = injectionPoint.getAnnotated();
 		WithMassAssignment massAssignment = field.getAnnotation(WithMassAssignment.class);

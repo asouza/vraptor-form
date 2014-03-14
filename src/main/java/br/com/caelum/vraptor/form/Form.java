@@ -35,15 +35,17 @@ public class Form<T> {
 	private Method customValidatorMethod;
 	private static Objenesis objenesis = new ObjenesisStd();
 	private MassAssignmentValidatorConfig massAssignmentValidatorConfig;
+	private br.com.caelum.vraptor.validator.Validator vraptorValidator;
 
 	@SuppressWarnings("unchecked")
 	public Form(Validator validator, MessageInterpolator interpolator, Locale locale, MethodExecutor methodExecutor,
-			Class<?> clazz) {
-		
+			br.com.caelum.vraptor.validator.Validator vraptorValidator, Class<?> clazz) {
+
 		this.validator = validator;
 		this.interpolator = interpolator;
 		this.locale = locale;
 		this.methodExecutor = methodExecutor;
+		this.vraptorValidator = vraptorValidator;
 
 		ObjectInstantiator<?> instantiator = Form.objenesis.getInstantiatorOf(clazz);
 		this.object = (T) instantiator.newInstance();
@@ -59,7 +61,7 @@ public class Form<T> {
 		validate();
 		return this;
 	}
-	
+
 	public void setMassAssignmentValidatorConfig(MassAssignmentValidatorConfig massAssignmentValidatorConfig) {
 		this.massAssignmentValidatorConfig = massAssignmentValidatorConfig;
 	}
@@ -88,7 +90,7 @@ public class Form<T> {
 
 		if (customValidatorMethod != null) {
 			List<Message> errors = methodExecutor.invoke(customValidatorMethod, object);
-			errors = errors == null ? errors = Collections.<Message>emptyList() : errors;
+			errors = errors == null ? errors = Collections.<Message> emptyList() : errors;
 			for (Message message : errors) {
 				if (message.getCategory() == null || message.getCategory().trim().equals("")) {
 					addGlobaldError(message);
@@ -108,35 +110,48 @@ public class Form<T> {
 	}
 
 	private void addFieldError(Message message) {
+		dirtyValidation(true);
 		allErrors.add(message);
 		fieldErrors.add(message);
 	}
-	
+
 	private void addGlobaldError(Message message) {
+		dirtyValidation(true);
 		allErrors.add(message);
 		globalErrors.add(message);
 	}
+	
+	private void dirtyValidation(boolean needsToDirty) {
+		if (needsToDirty && !vraptorValidator.hasErrors()) {
+			vraptorValidator.add(new FakeMessage());
+		}
+	}
+
 
 	public List<Message> getAllErrors() {
 		return allErrors;
 	}
 
 	public boolean checkBlackList(String... notAllowedParams) {
-		checkNonNull(massAssignmentValidatorConfig,MassAssignmentValidatorConfig.class.getSimpleName()+" should be set to use checkBlackList");
-		return massAssignmentValidatorConfig.blackList(notAllowedParams);
+		checkNonNull(massAssignmentValidatorConfig, MassAssignmentValidatorConfig.class.getSimpleName()
+				+ " should be set to use checkBlackList");
+		boolean hasBlackListParam = massAssignmentValidatorConfig.blackList(notAllowedParams);
+		dirtyValidation(hasBlackListParam);
+		return hasBlackListParam;
 	}
 
-	private void checkNonNull(Object object,String message) {
-		if(object==null){
+	private void checkNonNull(Object object, String message) {
+		if (object == null) {
 			throw new IllegalStateException(message);
 		}
 	}
 
 	public boolean checkWhiteList(String... allowedParams) {
-		checkNonNull(massAssignmentValidatorConfig,MassAssignmentValidatorConfig.class.getSimpleName()+" should be set to use checkWhiteList");
-		return massAssignmentValidatorConfig.whiteList(allowedParams);
+		checkNonNull(massAssignmentValidatorConfig, MassAssignmentValidatorConfig.class.getSimpleName()
+				+ " should be set to use checkWhiteList");
+		boolean whiteListFailed = massAssignmentValidatorConfig.whiteList(allowedParams);
+		dirtyValidation(whiteListFailed);
+		return whiteListFailed;
 	}
-	
-	
 
 }

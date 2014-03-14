@@ -1,11 +1,5 @@
 package br.com.caelum.vraptor.form;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Mockito.spy;
-
 import java.util.Locale;
 
 import javax.validation.MessageInterpolator;
@@ -13,27 +7,35 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import com.google.common.collect.ImmutableMap;
-
-import br.com.caelum.vraptor.form.Form;
-import br.com.caelum.vraptor.form.FormField;
+import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.beanvalidation.MessageInterpolatorFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class FormTest {
 	
 	private Validator validator;
 	private MessageInterpolator interpolator;
 	private Locale locale;
+	private br.com.caelum.vraptor.validator.Validator vraptorValidator;
 
 	@Before
 	public void setup(){
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		validator = spy(factory.getValidator());
 		interpolator = new MessageInterpolatorFactory(factory).getInstance();
+		vraptorValidator = spy(new MockValidator());
 		locale = Locale.US;
 	}
 
@@ -43,7 +45,7 @@ public class FormTest {
 
 		User usuario = new User("email@gmail.com", "Jonny");
 		form.bind(usuario);
-		assertFalse(form.hasErrors());
+		assertFalse(form.hasErrors());		
 	}
 
 	@Test
@@ -52,7 +54,8 @@ public class FormTest {
 		
 		User usuario = new User(null,null);
 		form.bind(usuario);
-		assertTrue(form.hasErrors());	
+		assertTrue(form.hasErrors());
+		verify(vraptorValidator).add(Mockito.any(FakeMessage.class));
 	}
 	
 	@Test
@@ -136,7 +139,7 @@ public class FormTest {
 	}
 	
 	private <T> Form<T> newForm(Class<T> klass) {
-		return new Form<T>(validator, interpolator,locale,new MirrorMethodExecutor(), klass);
+		return new Form<T>(validator, interpolator,locale,new MirrorMethodExecutor(),vraptorValidator,klass);
 	}
 
 }

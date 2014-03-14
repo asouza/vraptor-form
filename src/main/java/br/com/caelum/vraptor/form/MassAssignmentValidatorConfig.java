@@ -13,12 +13,12 @@ public class MassAssignmentValidatorConfig {
 		this.params = params;
 	}
 
-	public boolean blackList(String... notAllowedParams) {
+	public boolean hasBlackListedFields(String... notAllowedParams) {		
 		HashSet<String> notAllowed = Sets.newHashSet(notAllowedParams);
-		return Sets.intersection(notAllowed,params.keySet()).isEmpty();
+		return !Sets.intersection(notAllowed,params.keySet()).isEmpty();
 	}
 	
-	public boolean whiteList(String... allowedParams) {
+	public boolean hasOnlyAllowedFields(String... allowedParams) {
 		HashSet<String> allowed = Sets.newHashSet(allowedParams);
 		for (String param : params.keySet()) {
 			if(!allowed.contains(param)){

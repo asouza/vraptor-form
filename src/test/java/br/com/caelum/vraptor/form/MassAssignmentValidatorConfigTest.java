@@ -12,20 +12,27 @@ public class MassAssignmentValidatorConfigTest {
 	public void shouldBlockByBlackList() throws Exception {
 		ImmutableMap<String, String> params = ImmutableMap.<String,String>of("user.login", "value", "user.email", "value", "user.name" ,"value", "user.password","value");
 		MassAssignmentValidatorConfig validator = new MassAssignmentValidatorConfig(params);
-		assertFalse(validator.blackList("user.login","user.email"));
+		assertTrue(validator.hasBlackListedFields("user.login","user.email"));
+	}
+	
+	@Test
+	public void shouldBlockByBlackList2() throws Exception {
+		ImmutableMap<String, String> params = ImmutableMap.<String,String>of("user.login", "value", "user.email", "value", "user.name" ,"value", "user.password","value");
+		MassAssignmentValidatorConfig validator = new MassAssignmentValidatorConfig(params);
+		assertFalse(validator.hasBlackListedFields("user.admin"));
 	}
 	
 	@Test
 	public void shouldBlockByWhiteList() throws Exception {
 		ImmutableMap<String, String> params = ImmutableMap.<String,String>of("user.login", "value", "user.email", "value", "user.name" ,"value", "user.password","value");
 		MassAssignmentValidatorConfig validator = new MassAssignmentValidatorConfig(params);
-		assertFalse(validator.whiteList("user.name","user.password","user.email"));
+		assertFalse(validator.hasOnlyAllowedFields("user.name","user.password","user.email"));
 	}
 	
 	@Test
 	public void shouldAllowIfAllWhiteListAreSet() throws Exception {
 		ImmutableMap<String, String> params = ImmutableMap.<String,String>of("user.login", "value", "user.email", "value", "user.name" ,"value", "user.password","value");
 		MassAssignmentValidatorConfig validator = new MassAssignmentValidatorConfig(params);
-		assertTrue(validator.whiteList("user.name","user.password","user.login","user.email"));
+		assertTrue(validator.hasOnlyAllowedFields("user.name","user.password","user.login","user.email"));
 	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Vetoed;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
@@ -21,7 +21,7 @@ import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.beanvalidation.BeanValidatorContext;
 
-@Dependent
+@Vetoed
 public class Form<T> {
 
 	private T object;
@@ -132,10 +132,10 @@ public class Form<T> {
 		return allErrors;
 	}
 
-	public boolean checkBlackList(String... notAllowedParams) {
+	public boolean hasBlackListedFields(String... notAllowedParams) {
 		checkNonNull(massAssignmentValidatorConfig, MassAssignmentValidatorConfig.class.getSimpleName()
 				+ " should be set to use checkBlackList");
-		boolean hasBlackListParam = massAssignmentValidatorConfig.blackList(notAllowedParams);
+		boolean hasBlackListParam = massAssignmentValidatorConfig.hasBlackListedFields(notAllowedParams);
 		dirtyValidation(hasBlackListParam);
 		return hasBlackListParam;
 	}
@@ -146,12 +146,19 @@ public class Form<T> {
 		}
 	}
 
-	public boolean checkWhiteList(String... allowedParams) {
+	public boolean hasOnlyAllowedFields(String... allowedParams) {
 		checkNonNull(massAssignmentValidatorConfig, MassAssignmentValidatorConfig.class.getSimpleName()
 				+ " should be set to use checkWhiteList");
-		boolean whiteListFailed = massAssignmentValidatorConfig.whiteList(allowedParams);
+		boolean whiteListFailed = massAssignmentValidatorConfig.hasOnlyAllowedFields(allowedParams);
 		dirtyValidation(whiteListFailed);
 		return whiteListFailed;
 	}
+
+	public br.com.caelum.vraptor.validator.Validator navigate() {
+		//TODO Should create other object, but I(Alberto) don't want. Be my guess :).
+		return vraptorValidator;
+	}
+	
+	
 
 }

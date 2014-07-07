@@ -16,7 +16,6 @@ import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.objenesis.instantiator.ObjectInstantiator;
 
-import br.com.caelum.vraptor.reflection.MethodExecutor;
 import br.com.caelum.vraptor.validator.Message;
 import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.beanvalidation.BeanValidatorContext;
@@ -31,14 +30,14 @@ public class Form<T> {
 	private ValidationErrors fieldErrors = new ValidationErrors();
 	private List<Message> globalErrors = new ArrayList<>();
 	private List<Message> allErrors = new ArrayList<>();
-	private MethodExecutor methodExecutor;
+	private MirrorMethodExecutor methodExecutor;
 	private Method customValidatorMethod;
 	private static Objenesis objenesis = new ObjenesisStd();
 	private MassAssignmentValidatorConfig massAssignmentValidatorConfig;
 	private br.com.caelum.vraptor.validator.Validator vraptorValidator;
 
 	@SuppressWarnings("unchecked")
-	public Form(Validator validator, MessageInterpolator interpolator, Locale locale, MethodExecutor methodExecutor,
+	public Form(Validator validator, MessageInterpolator interpolator, Locale locale, MirrorMethodExecutor methodExecutor,
 			br.com.caelum.vraptor.validator.Validator vraptorValidator, Class<?> clazz) {
 
 		this.validator = validator;

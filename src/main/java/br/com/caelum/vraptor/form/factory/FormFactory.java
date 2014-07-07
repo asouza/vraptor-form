@@ -14,8 +14,8 @@ import javax.validation.Validator;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.form.Form;
 import br.com.caelum.vraptor.form.MassAssignmentValidatorConfig;
+import br.com.caelum.vraptor.form.MirrorMethodExecutor;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.reflection.MethodExecutor;
 
 @RequestScoped
 public class FormFactory {
@@ -26,7 +26,7 @@ public class FormFactory {
 	@Inject
 	private Locale locale;
 	@Inject
-	private MethodExecutor methodExecutor;
+	private MirrorMethodExecutor methodExecutor;
 	@Inject
 	private MutableRequest mutableRequest;
 	@Inject

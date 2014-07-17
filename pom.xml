@@ -8,10 +8,16 @@
 	<packaging>jar</packaging>
 
 	<scm>
-		<url>http://github.com/caelum/vraptor-form</url>
-		<connection>scm:git:git://github.com/caelum/vraptor-form</connection>
-		<developerConnection>scm:git:git@github.com:caelum/vraptor-form.git</developerConnection>
+		<url>http://github.com/asouza/vraptor-form</url>
+		<connection>scm:git:git://github.com/asouze/vraptor-form</connection>
+		<developerConnection>scm:git:git@github.com:asouza/vraptor-form.git</developerConnection>
 	</scm>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
 	<name>vraptor-form</name>
 	<url>http://maven.apache.org</url>

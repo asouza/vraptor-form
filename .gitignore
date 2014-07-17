@@ -7,3 +7,5 @@ jsp-compilation/
 *.jsp
 *.tag
 
+.idea/
+.iml
